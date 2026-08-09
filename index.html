@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Колекційні моделі автомобілів Mini Cars." />
+    <title>Mini Cars — колекційні моделі</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <a class="brand" href="#top" aria-label="Mini Cars — на головну">Mini Cars</a>
+      <button class="text-button js-order" type="button">Замовити</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Колекція 2026</p>
+          <h1>Стильні моделі автомобілів</h1>
+          <p class="hero-description">Колекційні машинки преміум-класу для тих, хто цінує деталі.</p>
+          <a class="button" href="#models">Переглянути моделі</a>
+        </div>
+      </section>
+
+      <section class="catalog" id="models" aria-labelledby="models-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Mini Cars</p>
+          <h2 id="models-heading">Наші моделі</h2>
+        </div>
+        <div class="product-grid">
+          <article class="product-card">
+            <img src="/assets/black-bentley.webp" alt="Чорна колекційна модель Bentley" />
+            <div class="product-content">
+              <div class="product-title-row">
+                <h3>Чорний Bentley</h3>
+                <p class="price">1 500 грн</p>
+              </div>
+              <p class="product-description">Колекційна модель автомобіля з деталізованим дизайном.</p>
+              <button class="button js-order" type="button" data-product="Чорний Bentley">Замовити</button>
+            </div>
+          </article>
+          <article class="product-card">
+            <img src="/assets/white-bentley.webp" alt="Біла колекційна модель Bentley" />
+            <div class="product-content">
+              <div class="product-title-row">
+                <h3>Білий Bentley</h3>
+                <p class="price">1 500 грн</p>
+              </div>
+              <p class="product-description">Елегантна колекційна модель з деталізованим дизайном.</p>
+              <button class="button js-order" type="button" data-product="Білий Bentley">Замовити</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="benefits" aria-label="Переваги Mini Cars">
+        <p>Деталізований дизайн</p>
+        <p>Преміальний вигляд</p>
+        <p>Швидке замовлення</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <a class="brand" href="#top">Mini Cars</a>
+        <p>Колекційні моделі автомобілів</p>
+      </div>
+      <p>© 2026 Mini Cars</p>
+    </footer>
+
+    <div class="modal-backdrop" id="order-modal" hidden>
+      <section class="order-modal" role="dialog" aria-modal="true" aria-labelledby="order-title">
+        <button class="close-button" type="button" aria-label="Закрити форму" id="close-order">×</button>
+        <p class="eyebrow">Mini Cars</p>
+        <h2 id="order-title">Оформити замовлення</h2>
+        <form id="order-form">
+          <label>
+            Ваше ім'я
+            <input name="name" autocomplete="name" minlength="2" maxlength="80" required />
+          </label>
+          <label>
+            Номер телефону
+            <input name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" minlength="7" maxlength="24" required />
+          </label>
+          <label>
+            Оберіть модель
+            <select name="product" id="product-select" required>
+              <option value="Чорний Bentley">Чорний Bentley — 1 500 грн</option>
+              <option value="Білий Bentley">Білий Bentley — 1 500 грн</option>
+            </select>
+          </label>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+          <button class="button button-full" type="submit" id="submit-order">Оформити замовлення</button>
+        </form>
+        <div class="success-message" id="success-message" hidden>
+          <div class="success-mark" aria-hidden="true">✓</div>
+          <h2>Дякуємо!</h2>
+          <p>Ваше замовлення надіслано. Ми зв'яжемося з вами найближчим часом.</p>
+          <button class="button button-full" type="button" id="done-order">Готово</button>
+        </div>
+      </section>
+    </div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
