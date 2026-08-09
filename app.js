@@ -6,7 +6,23 @@ const doneButton = document.querySelector("#done-order");
 const submitButton = document.querySelector("#submit-order");
 const errorMessage = document.querySelector("#form-error");
 const successMessage = document.querySelector("#success-message");
+const phoneInput = form.elements.phone;
+const ukrainianPhonePattern = /^\+380 \d{2} \d{3} \d{2} \d{2}$/;
 let lastTrigger = null;
+
+function formatUkrainianPhone(value) {
+  let digits = value.replace(/\D/g, "");
+  if (digits.startsWith("380")) digits = digits.slice(3);
+  if (digits.startsWith("0")) digits = digits.slice(1);
+  digits = digits.slice(0, 9);
+
+  let formatted = "+380";
+  if (digits.length) formatted += ` ${digits.slice(0, 2)}`;
+  if (digits.length > 2) formatted += ` ${digits.slice(2, 5)}`;
+  if (digits.length > 5) formatted += ` ${digits.slice(5, 7)}`;
+  if (digits.length > 7) formatted += ` ${digits.slice(7, 9)}`;
+  return formatted;
+}
 
 function openOrder(product, trigger) {
   lastTrigger = trigger;
@@ -31,6 +47,14 @@ document.querySelectorAll(".js-order").forEach((button) => {
   button.addEventListener("click", () => openOrder(button.dataset.product, button));
 });
 
+phoneInput.addEventListener("focus", () => {
+  if (!phoneInput.value) phoneInput.value = "+380";
+});
+
+phoneInput.addEventListener("input", () => {
+  phoneInput.value = formatUkrainianPhone(phoneInput.value);
+});
+
 closeButton.addEventListener("click", closeOrder);
 doneButton.addEventListener("click", closeOrder);
 modal.addEventListener("click", (event) => {
@@ -49,7 +73,7 @@ form.addEventListener("submit", async (event) => {
   const phone = data.get("phone").trim();
   const product = data.get("product");
 
-  if (!/^[+]?[-()\d\s]{7,24}$/.test(phone)) {
+  if (!ukrainianPhonePattern.test(phone)) {
     errorMessage.textContent = "Вкажіть коректний номер телефону.";
     errorMessage.hidden = false;
     return;
