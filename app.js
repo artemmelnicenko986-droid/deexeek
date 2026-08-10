@@ -44,6 +44,34 @@ function closeOrder() {
   lastTrigger?.focus();
 }
 
+function redirectToLiqPay(checkoutUrl, data, signature) {
+  const paymentForm = document.createElement("form");
+  paymentForm.method = "POST";
+  paymentForm.action = checkoutUrl;
+  paymentForm.acceptCharset = "utf-8";
+
+  for (const [name, value] of Object.entries({ data, signature })) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    input.value = value;
+    paymentForm.append(input);
+  }
+
+  document.body.append(paymentForm);
+  paymentForm.submit();
+}
+
+function showPaymentReturn() {
+  if (new URLSearchParams(window.location.search).get("payment") !== "return") return;
+
+  window.history.replaceState({}, document.title, window.location.pathname);
+  form.hidden = true;
+  successMessage.hidden = false;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
 document.querySelectorAll(".js-order").forEach((button) => {
   button.addEventListener("click", () => openOrder(button.dataset.product, button));
 });
@@ -92,23 +120,25 @@ form.addEventListener("submit", async (event) => {
   }
 
   submitButton.disabled = true;
-  submitButton.textContent = "Надсилаємо…";
+  submitButton.textContent = "Переходимо до оплати…";
   try {
-    const response = await fetch("/api/order", {
+    const response = await fetch("/api/create-payment", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name, phone, product, price: "1 500 грн" }),
+      body: JSON.stringify({ name, phone, product }),
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || "Не вдалося надіслати замовлення.");
+    if (!response.ok || !result.data || !result.signature || !result.checkoutUrl) {
+      throw new Error(result.error || "Не вдалося створити платіж.");
+    }
 
-    form.hidden = true;
-    successMessage.hidden = false;
+    redirectToLiqPay(result.checkoutUrl, result.data, result.signature);
   } catch (error) {
-    errorMessage.textContent = error.message || "Не вдалося надіслати замовлення. Спробуйте ще раз.";
+    errorMessage.textContent = error.message || "Не вдалося перейти до оплати. Спробуйте ще раз.";
     errorMessage.hidden = false;
-  } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "Оформити замовлення";
+    submitButton.textContent = "Перейти до оплати";
   }
 });
+
+showPaymentReturn();
