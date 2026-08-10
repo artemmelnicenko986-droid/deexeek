@@ -81,7 +81,18 @@
           </label>
           <label>
             Номер телефону
-            <input name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" minlength="7" maxlength="24" required />
+            <input
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              inputmode="numeric"
+              placeholder="+380 68 123 45 67"
+              minlength="16"
+              maxlength="16"
+              pattern="\+380 (39|50|63|66|67|68|73|75|77|89|91|92|93|94|95|96|97|98|99) [0-9]{3} [0-9]{2} [0-9]{2}"
+              title="Введіть український мобільний номер у форматі +380 68 123 45 67."
+              required
+            />
           </label>
           <label>
             Оберіть модель
