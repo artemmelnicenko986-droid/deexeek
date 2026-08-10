@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   const cleanProduct = typeof product === "string" ? product.trim() : "";
   const cleanPrice = typeof price === "string" ? price.trim() : "";
 
-  const validPhone = /^[+]?[-()\d\s]{7,24}$/.test(cleanPhone);
+  const validPhone = /^\+380 (?:39|50|63|66|67|68|73|75|77|89|91|92|93|94|95|96|97|98|99) \d{3} \d{2} \d{2}$/.test(cleanPhone);
   if (
     cleanName.length < 2 ||
     cleanName.length > 80 ||
