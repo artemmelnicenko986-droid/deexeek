@@ -7,7 +7,8 @@ const submitButton = document.querySelector("#submit-order");
 const errorMessage = document.querySelector("#form-error");
 const successMessage = document.querySelector("#success-message");
 const phoneInput = form.elements.phone;
-const ukrainianPhonePattern = /^\+380 \d{2} \d{3} \d{2} \d{2}$/;
+const ukrainianMobileCodes = ["39", "50", "63", "66", "67", "68", "73", "75", "77", "89", "91", "92", "93", "94", "95", "96", "97", "98", "99"];
+const ukrainianPhonePattern = /^\+380 (?:39|50|63|66|67|68|73|75|77|89|91|92|93|94|95|96|97|98|99) \d{3} \d{2} \d{2}$/;
 let lastTrigger = null;
 
 function formatUkrainianPhone(value) {
@@ -51,8 +52,19 @@ phoneInput.addEventListener("focus", () => {
   if (!phoneInput.value) phoneInput.value = "+380";
 });
 
+function validatePhoneCode() {
+  const code = phoneInput.value.match(/^\+380 (\d{2})/)?.[1];
+  const isValid = !code || ukrainianMobileCodes.includes(code);
+
+  phoneInput.setCustomValidity(
+    isValid ? "" : "Вкажіть український мобільний код, наприклад 068, 096 або 073.",
+  );
+  return isValid;
+}
+
 phoneInput.addEventListener("input", () => {
   phoneInput.value = formatUkrainianPhone(phoneInput.value);
+  validatePhoneCode();
 });
 
 closeButton.addEventListener("click", closeOrder);
@@ -74,7 +86,7 @@ form.addEventListener("submit", async (event) => {
   const product = data.get("product");
 
   if (!ukrainianPhonePattern.test(phone)) {
-    errorMessage.textContent = "Вкажіть коректний номер телефону.";
+    errorMessage.textContent = "Вкажіть український мобільний номер у форматі +380 68 123 45 67.";
     errorMessage.hidden = false;
     return;
   }
